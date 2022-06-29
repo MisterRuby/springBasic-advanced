@@ -2,9 +2,7 @@ package ruby.springbasic2.v3;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ruby.springbasic2.trace.TraceId;
 import ruby.springbasic2.trace.TraceStatus;
-import ruby.springbasic2.trace.helloTrace.HelloTraceV2;
 import ruby.springbasic2.trace.logTrace.LogTrace;
 
 @Service
