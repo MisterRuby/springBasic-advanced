@@ -1,4 +1,4 @@
-package hello.proxy.pureproxy.proxy.code;
+package proxy.code;
 
 public class ProxyPatternClient {
 

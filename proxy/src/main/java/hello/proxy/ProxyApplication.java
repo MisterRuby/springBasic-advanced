@@ -2,8 +2,13 @@ package hello.proxy;
 
 import hello.proxy.config.AppV1Config;
 import hello.proxy.config.AppV2Config;
+import hello.proxy.config.v1_proxy.ConcreteProxyConfig;
+import hello.proxy.config.v1_proxy.InterfaceProxyConfig;
+import hello.proxy.trace.logtrace.LogTrace;
+import hello.proxy.trace.logtrace.ThreadLocalLogTrace;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -16,7 +21,8 @@ import org.springframework.context.annotation.Import;
  *    scanBasePackages 값을 별도로 지정하여 config 패키지를 컴포넌트 스캔 대상에 포함시키지 않음
  */
 //@Import(AppV1Config.class)
-@Import({AppV1Config.class, AppV2Config.class})
+//@Import({AppV1Config.class, AppV2Config.class})
+@Import({InterfaceProxyConfig.class, ConcreteProxyConfig.class})
 @SpringBootApplication(scanBasePackages = "hello.proxy.app") //주의
 public class ProxyApplication {
 
@@ -24,4 +30,8 @@ public class ProxyApplication {
 		SpringApplication.run(ProxyApplication.class, args);
 	}
 
+	@Bean
+	public LogTrace logTrace() {
+		return new ThreadLocalLogTrace();
+	}
 }
