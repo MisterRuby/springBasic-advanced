@@ -1,30 +1,34 @@
-package hello.proxy.config.proxyfactory.advice;
+package hello.proxy.config.v2_dynamicproxy.handler;
 
 import hello.proxy.trace.TraceStatus;
 import hello.proxy.trace.logtrace.LogTrace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * 인터페이스를 구현한 모든 클래스에 적용할수 있는 동적 프록시
+ */
 @Slf4j
 @RequiredArgsConstructor
-public class LogTraceAdvice implements MethodInterceptor {
+public class LogTraceBasicHandler implements InvocationHandler {
 
+    private final Object target;
     private final LogTrace logTrace;
 
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         TraceStatus status = null;
         try {
-            Method method = invocation.getMethod();
+//            status = logTrace.begin("OrderRepository.save()");
             String message = method.getDeclaringClass().getSimpleName() + "." + method.getName() + "()";
             status = logTrace.begin(message);
 
             // 로직 호출
-            Object result = invocation.proceed();
+//            target.save(itemId);
+            Object result = method.invoke(target, args);
 
             logTrace.end(status);
             return result;
@@ -32,5 +36,7 @@ public class LogTraceAdvice implements MethodInterceptor {
             logTrace.exception(status, e);
             throw e;
         }
+
+
     }
 }
